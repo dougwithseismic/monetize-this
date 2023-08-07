@@ -1,7 +1,7 @@
 {
-    "name": "template-ts-npm-package",
-    "version": "1.0.0",
-    "description": "A template for scaffolding npm packages with Type Support",
+    "name": "monetize-this",
+    "version": "0.0.1",
+    "description": "Monetize any web extension audience, empower free product development.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "engines": {
@@ -47,6 +47,10 @@
     },
     "homepage": "https://github.com/dougwithseismic/template-ts-npm-package.git#readme",
     "devDependencies": {
+        "@types/babel__core": "^7.20.1",
+        "@types/chrome": "^0.0.240",
+        "@types/node": "^20.4.1",
+        "@types/webextension-polyfill": "^0.10.1",
         "@typescript-eslint/eslint-plugin": "^4.28.3",
         "@typescript-eslint/parser": "^4.28.3",
         "concurrently": "^8.2.0",
@@ -62,5 +66,8 @@
     },
     "contributors": [
         "Doug Silkstone (https://x.withseismic.com)"
-    ]
+    ],
+    "dependencies": {
+        "webextension-polyfill": "^0.10.0"
+    }
 }
