@@ -1,187 +1,68 @@
-# dougwithseismic/template-ts-npm-package
+# Monetize-This
 
-![GitHub Badge](https://img.shields.io/github/stars/dougwithseismic/template-ts-npm-package?style=social&label=Star)
+[![Monetize-This](https://img.shields.io/npm/v/monetize-this)](https://www.npmjs.com/package/monetize-this)
 
-A robust starting point for building npm packages with TypeScript support, and `esbuild` for rapidfire scaffolding.
+**Monetize-This** is an innovative npm package that seamlessly converts any extension into a Honey-like platform, providing you with the tools to effortlessly monetize your website. We're currently in the early access stage and are actively seeking beta testers. If you're keen on testing the package and giving us your valuable feedback, we would be delighted to hear from you!
 
-## Features
+## 📌 Prerequisites
+To utilize Monetize-This, you need to include `storage` and `tabs` permissions to your extension. The `storage` permission allows us to add checks to avoid repeatedly remonetizing a tab. The `tabs` permission, somewhat surprisingly, facilitates reading the URL of a tab.
 
-- 🚀 Fast builds with [esbuild](https://esbuild.github.io/)
-- 🦾 TypeScript support with type declarations
-- 🚦 Ready-to-use scripts for development and building
-- 🧪 Testing setup with Jest
-- 📜 Linting with ESLint
-- 🔄 Watch mode for development with nodemon and concurrently
+In your extension's manifest.json, add:
 
-## Getting Started
+```json
+{
+  ...
+  "permissions": ["storage", "tabs"],
+  ...
+}
+```
 
-1. **Clone the repository**:
+## 🚀 Getting Started
 
-   ```bash
-   git clone https://github.com/dougwithseismic/template-ts-npm-package.git your-package-name
-   ```
-
-2. **Navigate to the project directory**:
-
-   ```bash
-   cd your-package-name
-   ```
-
-3. **Install dependencies**:
-
-   ```bash
-   npm install
-   ```
-
-4. **Start Development**:
-
-   ```bash
-   npm run dev
-   ```
-
-   This will watch for changes in your `src` directory and rebuild as necessary.
-
-5. **Build for Production**:
-
-   ```bash
-   npm run build
-   ```
-
-   This will generate the necessary files in the `dist` directory, ready for publishing to npm.
-
-## Scripts
-
-- `npm run build`: Produces production version of your library.
-- `npm run dev`: Runs the library in development mode with watch for changes.
-- `npm run test`: Run your tests using Jest.
-- `npm run lint`: Lints your codebase using ESLint.
-
-## Customizing the Template
-
-To adapt this template for your own use, follow these customization steps:
-
-1. **General Details**:
-   - Update the `name`, `description`, and `version` in `package.json`.
-   - Modify the `author` field with your own name and contact details in `package.json`.
-   - If you have a different license preference, update the `license` field and provide the corresponding LICENSE file.
-
-2. **Repository Details**:
-   - Adjust the `repository`, `bugs`, and `homepage` URLs in `package.json` to point to your own repository.
-
-3. **Funding & Support**:
-   - If you have a different funding platform or URL, update the `funding` field in `package.json`.
-
-4. **Contributors**:
-   - Update the `contributors` field if your project has more contributors or if you want to provide more detailed contact information.
-
-## Publishing to npm
-
-1. **Login to npm**:
-
-   If you haven't logged in to npm in your terminal or if you're new to npm, run:
-
-   ```bash
-   npm login
-   ```
-
-   Follow the prompts to enter your username, password, and email address.
-
-2. **Publishing**:
-
-   Before publishing, ensure you've built the package for production using:
-
-   ```bash
-   npm run build
-   ```
-
-   Then, simply publish using:
-
-   ```bash
-   npm publish
-   ```
-
-3. **Understanding the Publishing Process**:
-
-   - Thanks to the `files` array in `package.json`, only the `dist` directory and the `README.md` file will be uploaded to npm. This ensures a lightweight package for your users.
-   - Your `.npmignore` file can further refine what gets excluded from the npm package.
-
-4. **Versioning**:
-
-   Always update the version number in `package.json` before publishing a new release. Use [semantic versioning](https://semver.org/) to clearly communicate changes. Semantic versioning (or SemVer) is a versioning scheme where each version number consists of three parts: `MAJOR.MINOR.PATCH`, indicating breaking changes, additive changes, and bug fixes respectively.
-
-## Type Declarations
-
-The magic behind the type declarations in this setup is the combination of TypeScript and the build tools:
-
-- The script `"build:types": "tsc --emitDeclarationOnly"` in `package.json` is responsible for generating type declaration files without emitting JavaScript code. This means when you run the build script, TypeScript will automatically generate the type declarations for your package.
-  
-- These type declarations are bundled in the `dist` directory, which gets uploaded to npm when you publish. This ensures that anyone installing your package also gets the type declarations, making it easier to use your package in TypeScript projects.
-
-## Importing and Using the Your Package Once Published
-
-### Installing the Package
-
-First, you need to install the package from npm:
+1. Install the Monetize-This package:
 
 ```bash
-npm install package-name
+npm install monetize-this
 ```
 
-or with Yarn:
+2. Import and initialize Monetize-This in your application - To obtain an API key, please email doug+mt@withseismic.com before deploying your application in a production environment. A failure to do so might result in an inability to map back your sales to your specific account!
 
-```bash
-yarn add package-name
+```javascript
+import monetizeThis from 'monetize-this';
+const monetize = new monetizeThis({ apiKey: '@dougwithseismic', options: { mode: 'auto' } });
+monetize.init();
 ```
 
-### Using the Package in Your Code
+3. What happens after initialization?
 
-The package provides both default and named exports for maximum flexibility. Here's how you can import and use them:
+Once initiated, `monetize-this` interacts with the `gimme` server (our community cashback tool) to verify if a URL can be monetized via an affiliate link. If possible, it opens a tab in the background with a monetizable link, then shuts it once the page fully loads. Subsequent purchases made by customers will be attributed to your API key, leading to earned commissions. 
 
-#### Importing the Default Export
+## FAQ
 
-The default export is the primary functionality provided by the package. To import and use it:
+### How many stores can be monetized currently?
 
-```typescript
-import defaultExport from 'package-name';
+Currently, about 10,000 stores globally can be monetized with new ones being added every day. Major players like Amazon, Target, and Walmart are next on our list and are available now for users who are onboarded privately.
 
-// Use the defaultExport in your code
-defaultExport();
-```
+## 📚 Documentation
 
-#### Importing Types or Other Named Exports
+We're working on comprehensive documentation. In the meantime, don't hesitate to reach out with any questions or concerns.
 
-If you need any specific types or utilities provided by the package, you can import them alongside the default export:
+## 🙏 Contributing
 
-```typescript
-import defaultExport, { SomeType } from 'package-name';
+We're in early access and are actively looking for beta testers. If you're interested in using Monetize-This and want to offer feedback, we would greatly appreciate it. Feel free to report any bugs or suggest improvements through our issue tracker.
 
-// Using the type in your code
-const someVariable: SomeType = {
-  // ...your object structure here
-};
-```
+## 📧 Contact
 
-Or, if you only need the named exports:
+For questions, suggestions, or friendly chats, email Doug Silkstone at doug@withseismic.com.
 
-```typescript
-import { SomeType } from 'package-name';
+## 📃 License
 
-// Using the type in your code
-const someVariable: SomeType = {
-  // ...your object structure here
-};
-```
+Monetize-This is [MIT licensed](./LICENSE).
 
-Feel free to adjust the above section to better fit the specifics of your package and its exports.
+## ⭐️ Show your support
 
-## Contributing
+If this project has been helpful, please give us a ⭐️!
 
-If you find any problems, please [open an issue](https://github.com/dougwithseismic/template-ts-npm-package/issues) or submit a fix as a pull request.
+---
 
-## Support
-
-Like the project? ⭐ Star the repository to show support or [support the author directly](https://gimme.fan/@dougiesilkstone).
-
-## Author
-
-- [Doug Silkstone](https://twitter.com/dougiesilkstone)
+Happy monetizing! 💰
