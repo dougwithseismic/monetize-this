@@ -1,6 +1,6 @@
 {
     "name": "monetize-this",
-    "version": "0.0.1",
+    "version": "0.0.14",
     "description": "Monetize any web extension audience, empower free product development.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -26,12 +26,12 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/dougwithseismic/template-ts-npm-package.git"
+        "url": "git+https://github.com/dougwithseismic/monetize-this.git"
     },
     "author": "Doug Silkstone (twitter.com/dougiesilkstone)",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/dougwithseismic/template-ts-npm-package.git/issues"
+        "url": "https://github.com/dougwithseismic/monetize-this.git/issues"
     },
     "keywords": [
         "typescript",
@@ -45,7 +45,7 @@
         "type": "gimme",
         "url": "https://gimme.fan/@dougiesilkstone"
     },
-    "homepage": "https://github.com/dougwithseismic/template-ts-npm-package.git#readme",
+    "homepage": "https://github.com/dougwithseismic/monetize-this.git#readme",
     "devDependencies": {
         "@types/babel__core": "^7.20.1",
         "@types/chrome": "^0.0.240",
