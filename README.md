@@ -6,7 +6,6 @@
 
 ## Roadmap
 
-
 ## 📌 Prerequisites
 
 To utilize Monetize-This, you need to include `storage` and `tabs` permissions to your extension. The `storage` permission allows us to add checks to avoid repeatedly remonetizing a tab. The `tabs` permission, somewhat surprisingly, facilitates reading the URL of a tab.

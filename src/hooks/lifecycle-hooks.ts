@@ -4,6 +4,8 @@ export interface LifecycleHooks {
     onInit: () => void
     onEnable: () => void
     onDisable: () => void
+    onBeforeMessage: (props: { command: string; url: string }) => void
+    onAfterMessage: (props: { command: string; url: string }) => void
     beforeTabUpdate: (props: TabProps) => void
     afterTabUpdate: (props: TabProps) => void
     beforeMonetizeTab: (props: { url: string }) => void
@@ -21,6 +23,13 @@ export const lifecycleHooks: LifecycleHooks = {
     onDisable: async () => {
         // Code for disabling monetization listeners
     },
+    onBeforeMessage: async ({ command, url }) => {
+        // Code to run before message is sent
+    },
+    onAfterMessage: async ({ command, url }) => {
+        // Code to run after message is sent
+    },
+
     beforeTabUpdate: async (props: TabProps) => {
         // Code to run before tab update actions
     },

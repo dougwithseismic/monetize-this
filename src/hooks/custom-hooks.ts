@@ -5,6 +5,8 @@ import { TabProps } from '../types'
 export interface CustomHooks {
     onEnable: (() => void)[]
     onDisable: (() => void)[]
+    onBeforeMessage: ((props: { command: string; url: string }) => void)[]
+    onAfterMessage: ((props: { command: string; url: string }) => void)[]
     beforeTabUpdate: ((props: TabProps) => void)[]
     afterTabUpdate: ((props: TabProps) => void)[]
     beforeMonetizeTab: ((props: { url: string }) => void)[]
@@ -16,6 +18,8 @@ export interface CustomHooks {
 export const customHooks: CustomHooks = {
     onEnable: [],
     onDisable: [],
+    onBeforeMessage: [],
+    onAfterMessage: [],
     beforeTabUpdate: [],
     afterTabUpdate: [],
     beforeMonetizeTab: [],
