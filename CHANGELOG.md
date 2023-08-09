@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.0.15] - 09.08.23
+
+### Addded
+
+- Custom Hook prop type support. Now you'll have access to fully typed lifecycle hook parameters.
+
 ## [0.0.14] - 08.08.23
 
 ### Added
@@ -32,8 +38,6 @@ removeListener();
 | afterTabUpdate        | After a tab update                           | props: `TabProps`                 |
 | beforeMonetizeTab     | Before monetizing a tab                      | props: `{ url: string }`          |
 | afterMonetizeTab      | After monetizing a tab                       | props: `{ url: string; success: boolean }` |
-
-### Removed
 
 - **Removing Custom Hooks**: The functionality to remove a specific custom hook has been introduced. Once a custom hook is added, you now have the ability to remove it at any time during the execution.
 
