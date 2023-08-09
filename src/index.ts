@@ -27,7 +27,7 @@ class MonetizeThis {
     private apiKey: string
     private options: LaunchOptions = defaultOptions
 
-    private listeners
+    public listeners
     private cookieManager: CookieManager
     private browserInteraction: BrowserInteraction
     private customHookManager: CustomHookManager
@@ -163,3 +163,11 @@ class MonetizeThis {
 
 export default MonetizeThis
 export { monetizeUrl }
+
+/* Example usage
+
+const monetizeThis = new MonetizeThis({ apiKey: '1', options: { mode: 'auto', enabled: true } })
+monetizeThis.enabled(true)
+monetizeThis.listeners.onAfterMonetizeTab((data) => console.log(data))
+
+*/

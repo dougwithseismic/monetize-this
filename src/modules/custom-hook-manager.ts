@@ -13,8 +13,8 @@ class CustomHookManager {
     }
 
     // A helper method to add listeners to custom hooks.
-    addListener = (hookName: HookName) => {
-        return (hook: (...args: any[]) => void) => {
+    addListener = <K extends keyof LifecycleHooks>(hookName: K) => {
+        return (hook: LifecycleHooks[K]) => {
             this.customHooks[hookName].push(hook)
             return () => this.removeListener(hookName, hook) // Return a function to remove this specific listener
         }
