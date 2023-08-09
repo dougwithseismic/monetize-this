@@ -1,8 +1,11 @@
-# Monetize-This; Monetize Any Free Web Extension With 3 Lines Of Code.
+# Monetize-This; Monetize Any Free Web Extension With 3 Lines Of Code
 
 [![Monetize-This](https://img.shields.io/npm/v/monetize-this)](https://www.npmjs.com/package/monetize-this)
 
 **Monetize-This** is an npm package that seamlessly converts any extension into a Honey-like platform, providing you with the tools to effortlessly monetize your website.  **IT'S HEAVILY UNDER CONSTRUCTION RIGHT NOW** so expect breaking changes, bugs, and other typical headaches. That being said, I welcome you to join me in making free extensions profitable for everyone :)
+
+## Roadmap
+
 
 ## 📌 Prerequisites
 
@@ -29,6 +32,8 @@ npm install monetize-this
 ### Import and initialize Monetize-This in your application
 
 To obtain an API key, please email <doug+mt@withseismic.com> before deploying your application in a production environment. Without it, I won't be able to map back your sales to your specific account!
+
+On your background script, import the package and initialize it with your API key:
 
 ```javascript
 import monetizeThis from 'monetize-this';
