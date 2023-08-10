@@ -23,6 +23,9 @@ const defaultOptions: LaunchOptions = {
     enabled: false, // Default is disabled. Call monetizeThis.enabled(true) to enable
 }
 
+/**
+ * Main class for managing monetization activities.
+ */
 class MonetizeThis {
     private apiKey: string
     private options: LaunchOptions = defaultOptions
@@ -32,7 +35,12 @@ class MonetizeThis {
     private browserInteraction: BrowserInteraction
     private customHookManager: CustomHookManager
 
-    // Constructor accepts API key and options to initialize the instance
+    /**
+     * Create a MonetizeThis instance.
+     * @param {MonetizeThisInit} Object containing API key and options.
+     * @returns {MonetizeThis} A MonetizeThis instance.
+     * @example const monetize = new MonetizeThis({ apiKey: '1234567890', options: { mode: 'auto' }})
+     */
     constructor({ apiKey, options }: MonetizeThisInit) {
         this.apiKey = apiKey
         this.options = options
@@ -58,7 +66,12 @@ class MonetizeThis {
         this.customHookManager.runHooks('onInit', { options }) // Hook: onInit
     }
 
-    // Public method to enable or disable monetization. It's the on/off switch for the extension.
+    /**
+     * Enable or disable monetization.
+     * @param {boolean} on - State of monetization.
+     * @returns {Promise<void>} A promise that resolves when the operation is complete.
+     * @example monetize.enabled(true)
+     */
     public async enabled(on: boolean): Promise<void> {
         if (on) {
             this.options.enabled = true
