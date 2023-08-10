@@ -1,6 +1,6 @@
 import { lifecycleHooks, LifecycleHooks } from '../hooks/lifecycle-hooks'
 import { customHooks, CustomHooks } from '../hooks/custom-hooks'
-import { isPromise } from 'util/types'
+import { isPromise } from '../helpers/is-promise'
 
 type HookName = keyof CustomHooks & keyof LifecycleHooks
 
