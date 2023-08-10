@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.0.16] - 10.08.23
+## [0.0.17] - 10.08.23
 
 - Added `ignoreList` to options. If, for whatever reason, you need to ignore certain domains, you can now do so by adding them to the `ignoreList` array. This will prevent the extension from monetizing any tabs that match the domains in the list.
 
