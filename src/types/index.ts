@@ -1,9 +1,14 @@
 import { Tabs } from 'webextension-polyfill'
-import { LaunchOptions } from '../options'
 
 export interface MonetizeThisInit {
     apiKey: string
     options: LaunchOptions
+}
+
+export interface LaunchOptions {
+    mode: 'auto' | 'manual'
+    enabled?: boolean
+    ignoreList?: string[]
 }
 
 export type CookieDropData = { value: string; timestamp: number } | undefined
@@ -19,5 +24,4 @@ export type MessageCommand = {
     url: string
 }
 
-
-export type HookFunction = (...args: any[]) => void;
+export type HookFunction = (...args: any[]) => void

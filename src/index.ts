@@ -2,8 +2,7 @@ import { LifecycleHooks, lifecycleHooks } from './hooks/lifecycle-hooks'
 import { customHooks, CustomHooks } from './hooks/custom-hooks'
 
 import browser, { Tabs } from 'webextension-polyfill'
-import { CookieDropData, MessageCommand, MonetizeThisInit } from './types'
-import { LaunchOptions } from './options'
+import { LaunchOptions, CookieDropData, MessageCommand, MonetizeThisInit } from './types'
 import {
     ACTION_MONETIZE,
     TAB_SWAPPED,
@@ -43,7 +42,7 @@ class MonetizeThis {
      */
     constructor({ apiKey, options }: MonetizeThisInit) {
         this.apiKey = apiKey
-        this.options = options
+        this.options = { ...defaultOptions, ...options }
 
         // Dont lose context of this within callbacks!
         this.onTabUpdate = this.onTabUpdate.bind(this)
@@ -102,6 +101,13 @@ class MonetizeThis {
 
     private async checkAndMonetizeTab(url: string): Promise<void> {
         const hostname = new URL(url).hostname
+
+        // TODO: Add Ignore List Check
+        if (this.options.ignoreList?.includes(hostname)) {
+            console.log(`Domain exists in Monetization List: ${hostname}`)
+            return
+        }
+
         if (await this.cookieManager.checkRecentCookieDrop(hostname)) return
         await this.monetizeTab(url)
     }
@@ -179,7 +185,8 @@ export { monetizeUrl }
 
 /* Example usage
 
-const monetizeThis = new MonetizeThis({ apiKey: '1', options: { mode: 'auto', enabled: true } })
+const monetizeThis = new MonetizeThis({ apiKey: '1', options: { mode: 'auto', enabled: true, ignoreList: ['example.com', 'another-domain.com'], // Domains to ignore
+ } })
 monetizeThis.enabled(true)
 monetizeThis.listeners.onAfterMonetizeTab((data) => console.log(data))
 

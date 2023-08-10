@@ -37,7 +37,14 @@ On your background script, import the package and initialize it with your API ke
 ```javascript
 import monetizeThis from 'monetize-this';
 
-const monetize = new monetizeThis({ apiKey: '@dougwithseismic', options: { mode: 'auto' } });
+const monetizeThis = new MonetizeThis({
+    apiKey: '1',
+    options: {
+        mode: 'auto', // Will attempt to monetize every tab automatically. 'manual' mode will wait for you to call monetizeThis.monetizeTab(url) from your content script.
+        enabled: true,
+        ignoreList: ['example.com', 'another-domain.com'], // Domains to ignore
+    },
+})
 
 monetize.enabled(true); // Call this to enable monetization
 ```

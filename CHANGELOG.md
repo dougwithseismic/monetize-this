@@ -1,18 +1,30 @@
 # Changelog
 
-## [0.0.15] - 09.08.23
+## [0.0.16] - 10.08.23
 
-### Addded
+- Added `ignoreList` to options. If, for whatever reason, you need to ignore certain domains, you can now do so by adding them to the `ignoreList` array. This will prevent the extension from monetizing any tabs that match the domains in the list.
+
+```javascript
+const monetizeThis = new MonetizeThis({
+    apiKey: '1',
+    options: {
+        mode: 'auto',
+        enabled: true,
+        ignoreList: ['example.com', 'another-domain.com'], // Domains to ignore
+    },
+})
+
+```
+
+## [0.0.15] - 09.08.23
 
 - Custom Hook prop type support. Now you'll have access to fully typed lifecycle hook parameters.
 
 ## [0.0.14] - 08.08.23
 
-### Added
-
 - Custom Lifecycle Hooks: Now you can easily extend the functionality by using custom lifecycle hooks. These hooks allow you to perform specific actions at different stages of the monetization process.
 
-#### Example of Adding Custom Hooks
+### Example of Adding Custom Hooks
 
 ```typescript
 import MonetizeThis from 'path/to/monetize-this';
