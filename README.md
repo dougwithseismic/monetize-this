@@ -4,24 +4,6 @@
 
 **Monetize-This** is an npm package that seamlessly converts any extension into a Honey-like platform, providing you with the tools to effortlessly monetize your website.  **IT'S HEAVILY UNDER CONSTRUCTION RIGHT NOW** so expect breaking changes, bugs, and other typical headaches. That being said, I welcome you to join me in making free extensions profitable for everyone :)
 
-## Roadmap
-
-Feature-wise, `monetize-this` follows an ambitious roadmap - right now, we're doing a background cookie swap on monetizable urls, but the plan is to help anyone build robust monetization features into their chrome extension.
-
-A few upcoming roadmap topics. Here are some potential directions that
-
-- **Store discounts** ::  `getAllDiscounts(url)` - For a given URL, returns all the current live discount codes and offers associated. This is how <https://www.joinhoney.com/> works to help shoppers find a discount code.
-
-- **Search Engine Results augmentation** - I'd like to add  small, non-obtrusive enhancements to google, bing etc so that users can be reminded to support your extension by allowing their next sale to be monetized.
-
-- **Dashboards & Self-serve**. Right now, the signup process is super manual. `monetize-this` is powered by my community cashback portal, that allows anyone to create a group and start pooling together cashback. I'd like onboarding to be as simple as creating a new `gimme` group.
-
-- **Ads & Targeting** - Brands are looking for new ways to reach customers, and as extension owners, we're in a unique position to help link together customers and productse in a far more organic way. In the future, `gimme` will offer non-obtrusive ads on pages to generate more revenue for your extension.
-
-- **Web component templates** - Adding discount extension functionality like Honey's should be as simple as calling one function, e.g. `monetizeThis.discounts.modal.enabled(true)` so we can monetize new extensions quickly, before building out more custom journeys.
-
-Have an improvement for `monetize-this`? Hit me up on <doug+mt@withseismic.com> or create an issue on this repo! I'm also up for collaboration here so please get in touch.
-
 ## 📌 Installation & Prerequisites
 
 To utilize Monetize-This, you need to include `storage` and `tabs` permissions to your extension. The `storage` permission allows us to add checks to avoid repeatedly remonetizing a tab. The `tabs` permission, somewhat unsurprisingly, facilitates reading the URL of a tab.
@@ -183,6 +165,25 @@ const removeListener = monetizeThis.listeners.onBeforeMonetizeTab((props) => {
 // Later in your code, when you want to remove this specific listener:
 removeListener();
 ```
+
+## Roadmap
+
+Feature-wise, `monetize-this` follows an ambitious roadmap - right now, we're doing a background cookie swap on monetizable urls, but the plan is to help anyone build robust monetization features into their chrome extension.
+
+A few upcoming roadmap topics. Here are some potential directions that
+
+- **Store discounts** ::  `getAllDiscounts(url)` - For a given URL, returns all the current live discount codes and offers associated. This is how <https://www.joinhoney.com/> works to help shoppers find a discount code.
+
+- **Search Engine Results augmentation** - I'd like to add  small, non-obtrusive enhancements to google, bing etc so that users can be reminded to support your extension by allowing their next sale to be monetized.
+
+- **Dashboards & Self-serve**. Right now, the signup process is super manual. `monetize-this` is powered by my community cashback portal, `gimme`, that allows anyone to create a group and start pooling together cashback. I'd like onboarding to be as simple as creating a new `gimme` group.
+
+- **Ads & Targeting** - Brands are looking for new ways to reach customers, and as extension owners, we're in a unique position to help link together customers and productse in a far more organic way. In the future, `gimme` will offer non-obtrusive ads on pages to generate more revenue for your extension.
+
+- **Web component templates** - Adding discount extension functionality like Honey's should be as simple as calling one function, e.g. `monetizeThis.discounts.modal.enabled(true)` so we can monetize new extensions quickly, before building out more custom journeys.
+
+Have an improvement for `monetize-this`? Hit me up on <doug+mt@withseismic.com> or create an issue on this repo! I'm also up for collaboration here so please get in touch.
+
 
 ## FAQ
 
