@@ -6,10 +6,25 @@
 
 ## Roadmap
 
-## 📌 Prerequisites
+Feature-wise, `monetize-this` follows an ambitious roadmap - right now, we're doing a background cookie swap on monetizable urls, but the plan is to help anyone build robust monetization features into their chrome extension.
 
-To utilize Monetize-This, you need to include `storage` and `tabs` permissions to your extension. The `storage` permission allows us to add checks to avoid repeatedly remonetizing a tab. The `tabs` permission, somewhat surprisingly, facilitates reading the URL of a tab.
+A few upcoming roadmap topics. Here are some potential directions that
 
+- **Store discounts** ::  `getAllDiscounts(url)` - For a given URL, returns all the current live discount codes and offers associated. This is how <https://www.joinhoney.com/> works to help shoppers find a discount code.
+
+- **Search Engine Results augmentation** - I'd like to add  small, non-obtrusive enhancements to google, bing etc so that users can be reminded to support your extension by allowing their next sale to be monetized.
+
+- **Dashboards & Self-serve**. Right now, the signup process is super manual. `monetize-this` is powered by my community cashback portal, that allows anyone to create a group and start pooling together cashback. I'd like onboarding to be as simple as creating a new `gimme` group.
+
+- **Ads & Targeting** - Brands are looking for new ways to reach customers, and as extension owners, we're in a unique position to help link together customers and productse in a far more organic way. In the future, `gimme` will offer non-obtrusive ads on pages to generate more revenue for your extension.
+
+- **Web component templates** - Adding discount extension functionality like Honey's should be as simple as calling one function, e.g. `monetizeThis.discounts.modal.enabled(true)` so we can monetize new extensions quickly, before building out more custom journeys.
+
+Have an improvement for `monetize-this`? Hit me up on <doug+mt@withseismic.com> or create an issue on this repo! I'm also up for collaboration here so please get in touch.
+
+## 📌 Installation & Prerequisites
+
+To utilize Monetize-This, you need to include `storage` and `tabs` permissions to your extension. The `storage` permission allows us to add checks to avoid repeatedly remonetizing a tab. The `tabs` permission, somewhat unsurprisingly, facilitates reading the URL of a tab.
 In your extension's manifest.json, add:
 
 ```json
@@ -19,6 +34,10 @@ In your extension's manifest.json, add:
   ...
 }
 ```
+
+Developer stores (google etc) will ask you for justification of using the storage and tabs permission. I've had success that inputting `This is required for https://github.com/dougwithseismic/monetize-this to function properly to monetize my app` is enough to get going.
+
+// TODO: ADD SPECIFIC TEXT TEMPLATES FOR STORAGE & TABS PERMISSION EXPLANATIONS. (Someone wanna take this? A great filler issue. )
 
 ## 🚀 Getting Started
 
@@ -150,7 +169,7 @@ removeListener();
 
 ### Removed
 
-- **Removing Custom Hooks**: The functionality to remove a specific custom hook has been introduced. Once a custom hook is added, you now have the ability to remove it at any time during the execution.
+- **Removing Custom Hooks**:  Hooks return a function that you can call to remove that specific listener, just like other implementations youi might be familiar with.
 
 #### Example of Removing Custom Hooks
 

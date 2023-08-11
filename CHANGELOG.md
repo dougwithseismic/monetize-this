@@ -27,7 +27,7 @@ const monetizeThis = new MonetizeThis({
 ### Example of Adding Custom Hooks
 
 ```typescript
-import MonetizeThis from 'path/to/monetize-this';
+import MonetizeThis from 'monetize-this';
 
 const monetizeThis = new MonetizeThis({ apiKey: 'your-api-key', options: {} });
 
