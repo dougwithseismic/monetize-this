@@ -1,5 +1,6 @@
 # Monetize-This; Monetize Any Free Web Extension With 3 Lines Of Code
 
+[![Discord](https://img.shields.io/badge/Discord-Join%20Chat-blue?logo=discord&style=flat)](https//discord.gg/gimme)
 [![Monetize-This](https://img.shields.io/npm/v/monetize-this)](https://www.npmjs.com/package/monetize-this)
 
 **Monetize-This** is an npm package that seamlessly converts any extension into a Honey-like platform, providing you with the tools to effortlessly monetize your website.  **IT'S HEAVILY UNDER CONSTRUCTION RIGHT NOW** so expect breaking changes, bugs, and other typical headaches. That being said, I welcome you to join me in making free extensions profitable for everyone :)
@@ -22,6 +23,12 @@ Developer stores (google etc) will ask you for justification of using the storag
 // TODO: ADD SPECIFIC TEXT TEMPLATES FOR STORAGE & TABS PERMISSION EXPLANATIONS. (Someone wanna take this? A great filler issue. )
 
 ## 🚀 Getting Started
+
+### Prerequisites:
+
+1. Star this repo!
+2. Join Discord and say hi! <https://discord.gg/gimme>
+3. Get started for real.
 
 ### Install the Monetize-This package
 
@@ -149,7 +156,7 @@ removeListener();
 | beforeMonetizeTab     | Before monetizing a tab                      | props: `{ url: string }`          |
 | afterMonetizeTab      | After monetizing a tab                       | props: `{ url: string; success: boolean }` |
 
-### Removed
+### Removing Custom Hooks
 
 - **Removing Custom Hooks**:  Hooks return a function that you can call to remove that specific listener, just like other implementations youi might be familiar with.
 
