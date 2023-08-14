@@ -1,6 +1,7 @@
 # Monetize-This; Monetize Any Free Web Extension With 3 Lines Of Code
 
-[![Discord](https://img.shields.io/badge/Discord-Join%20Chat-blue?logo=discord&style=flat)](https//discord.gg/gimme)
+[![Discord](https://img.shields.io/discord/1140522766764888084?style=flat&logo=discord&logoColor=blue&label=discord)](https//discord.gg/gimme)
+
 [![Monetize-This](https://img.shields.io/npm/v/monetize-this)](https://www.npmjs.com/package/monetize-this)
 
 **Monetize-This** is an npm package that seamlessly converts any extension into a Honey-like platform, providing you with the tools to effortlessly monetize your website.  **IT'S HEAVILY UNDER CONSTRUCTION RIGHT NOW** so expect breaking changes, bugs, and other typical headaches. That being said, I welcome you to join me in making free extensions profitable for everyone :)
@@ -24,7 +25,7 @@ Developer stores (google etc) will ask you for justification of using the storag
 
 ## 🚀 Getting Started
 
-### Prerequisites:
+### Prerequisites
 
 1. Star this repo!
 2. Join Discord and say hi! <https://discord.gg/gimme>
@@ -190,7 +191,6 @@ A few upcoming roadmap topics. Here are some potential directions that
 - **Web component templates** - Adding discount extension functionality like Honey's should be as simple as calling one function, e.g. `monetizeThis.discounts.modal.enabled(true)` so we can monetize new extensions quickly, before building out more custom journeys.
 
 Have an improvement for `monetize-this`? Hit me up on <doug+mt@withseismic.com> or create an issue on this repo! I'm also up for collaboration here so please get in touch.
-
 
 ## FAQ
 
