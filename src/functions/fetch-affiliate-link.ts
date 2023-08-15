@@ -9,7 +9,7 @@ async function fetchAffiliateLink(url: string, apiKey: string): Promise<string |
     try {
         const hostname = new URL(url).hostname
         // Fetch the affiliate link from the Gimme API
-        const response = await fetch(`${API_URL}${hostname}?fobs=${apiKey}&fobs2=${APP_NAME}`)
+        const response = await fetch(`${API_URL}${hostname}`)
         const { AffiliateRelationship } = await response.json()
 
         if (!AffiliateRelationship || AffiliateRelationship.length === 0) {
@@ -24,13 +24,12 @@ async function fetchAffiliateLink(url: string, apiKey: string): Promise<string |
         }
 
         // Get the URL from the AffiliateRelationship object
-        const affiliateURL = AffiliateRelationship[0].url
+        const affiliateURL = `${AffiliateRelationship[0].url}?fobs=${apiKey}&fobs2=${APP_NAME}`
         return affiliateURL
     } catch (error) {
         console.error('Error fetching affiliate link:', error)
         return null
     }
 }
-
 
 export default fetchAffiliateLink

@@ -1,8 +1,6 @@
 # Monetize-This; Monetize Any Free Web Extension With 3 Lines Of Code
 
-[![Discord](https://img.shields.io/discord/1140522766764888084?style=flat&logo=discord&logoColor=blue&label=discord)](https//discord.gg/gimme)
-
-[![Monetize-This](https://img.shields.io/npm/v/monetize-this)](https://www.npmjs.com/package/monetize-this)
+[![Discord](https://img.shields.io/discord/1140522766764888084?style=flat&logo=discord&logoColor=blue&label=discord)](https//discord.gg/gimme) [![Monetize-This](https://img.shields.io/npm/v/monetize-this)](https://www.npmjs.com/package/monetize-this)
 
 **Monetize-This** is an npm package that seamlessly converts any extension into a Honey-like platform, providing you with the tools to effortlessly monetize your website.  **IT'S HEAVILY UNDER CONSTRUCTION RIGHT NOW** so expect breaking changes, bugs, and other typical headaches. That being said, I welcome you to join me in making free extensions profitable for everyone :)
 
