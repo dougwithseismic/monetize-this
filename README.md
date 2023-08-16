@@ -60,6 +60,24 @@ monetize.enabled(true); // Call this to enable monetization
 
 Once enabled, `monetize-this` interacts with the `gimme` server (our community cashback tool) to verify if a URL can be monetized via an affiliate link. If possible, it opens a tab in the background with a monetizable link, then shuts it once the page fully loads. Subsequent purchases made by customers will be attributed to your API key, leading to earned commissions.
 
+## Helper Functions
+
+### isMonetizable : `isMonetizable(url: string) => Promise<boolean>`
+
+Checks if a URL is monetizable. Returns a promise that resolves to a boolean.
+
+```typescript
+const isMonetizable = await monetizeThis.isMonetizable('https://www.amazon.com');
+```
+
+### monetizeTab : `monetizeTab(url: string) => Promise<void>`
+
+Monetizes a tab by sending a message to the service worker that kicks off monetization. Returns a promise that resolves to a boolean.
+
+```typescript
+const isMonetizable = await monetizeThis.monetizeTab('https://www.amazon.com');
+```
+
 ## Custom Hooks
 
 ### onEnable

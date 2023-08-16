@@ -16,6 +16,7 @@ import CookieManager from './modules/cookie-manager'
 import BrowserInteraction from './modules/browser-interaction'
 import CustomHookManager from './modules/custom-hook-manager'
 import fetchAffiliateLink from './functions/fetch-affiliate-link'
+import isMonetizable from './functions/is-monetizable'
 
 const defaultOptions: LaunchOptions = {
     mode: 'auto', // Default mode set to 'auto'
@@ -181,7 +182,7 @@ class MonetizeThis {
 }
 
 export default MonetizeThis
-export { monetizeUrl }
+export { monetizeUrl, isMonetizable }
 
 /* Example usage
 
@@ -191,3 +192,14 @@ monetizeThis.enabled(true)
 monetizeThis.listeners.onAfterMonetizeTab((data) => console.log(data))
 
 */
+
+// const monetizeThis = new MonetizeThis({
+//     apiKey: '@dougwithseismic',
+//     options: {
+//         mode: 'auto',
+//         enabled: true,
+//         ignoreList: ['example.com', 'another-domain.com'], // Domains to ignore
+//     },
+// })
+
+// monetizeThis.enabled(true)
