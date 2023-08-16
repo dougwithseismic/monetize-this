@@ -7,7 +7,9 @@ async function fetchAffiliateLink(url: string, apiKey: string): Promise<string |
         return null
     }
     try {
-        const hostname = new URL(url).hostname
+        // if url contains http:// or https://, hostname = new URL(url).hostname else hostname = url
+        const hostname =
+            url.includes('http://') || url.includes('https://') ? new URL(url).hostname : url
         // Fetch the affiliate link from the Gimme API
         const response = await fetch(`${API_URL}${hostname}`)
         const { AffiliateRelationship } = await response.json()
