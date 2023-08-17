@@ -17,6 +17,7 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '18'
+        registry-url: 'https://registry.npmjs.org' # Required for npm publish
 
     - name: Install dependencies
       run: npm install
@@ -27,15 +28,17 @@ jobs:
     - name: Build project
       run: npm run build
 
-    - name: Setup Semantic Release
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }} # make sure to set this in your repository's secrets
-      run: npx semantic-release
+    - name: Increment version
+      run: npm version patch # You can use 'major', 'minor', or 'patch' as needed
 
-    # Optional: Add the dist directory to the commit
-    - name: Commit dist directory
+    - name: Publish to npm
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # make sure to set this in your repository's secrets
+
+    # Optional: Add the dist directory, updated package.json, CHANGELOG.md, and README.md to the commit
+    - name: Commit changes
       run: |
-        git add dist/*
-        git commit -m "chore: Add built files" || echo "No changes to commit"
+        git add dist/* package.json CHANGELOG.md README.md
+        git commit -m "chore: Add built files, increment version, and update docs" || echo "No changes to commit"
         git push origin main || echo "No changes to push"
