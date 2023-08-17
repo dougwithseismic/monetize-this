@@ -35,9 +35,12 @@ jobs:
 
     - name: Increment version
       run: |
-        npm version patch -m "chore: increment version"
-        git push origin main --follow-tags || echo "No changes to push"
-
+        npm version patch --no-git-tag-version
+        new_version=$(node -p "require('./package.json').version")
+        git add package.json
+        git commit -m "Bump version to $new_version"
+        git push origin main || echo "No changes to push"
+        
     - name: Publish to npm
       if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
       run: npm publish
