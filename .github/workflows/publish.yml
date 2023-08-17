@@ -40,6 +40,8 @@ jobs:
                   git add package.json
                   git commit -m "Bump version to $new_version"
                   git push origin main || echo "No changes to push"
+                  echo "NEW_VERSION=$new_version" >> $GITHUB_ENV # Set the new version as an environment variable
+
 
             - name: Publish to npm
               if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
@@ -49,14 +51,14 @@ jobs:
 
             - name: Create and Push Tag
               run: |
-                  git tag v$(node -p "require('./package.json').version") # Prefix the tag with 'v'
-                  git push origin v$(node -p "require('./package.json').version")
+                  git tag v${NEW_VERSION} # Prefix the tag with 'v'
+                  git push origin v${NEW_VERSION}
 
             - name: Create GitHub Release
               uses: actions/create-release@v1
               with:
-                  tag_name: v$(node -p "require('./package.json').version") # Use the new version number as the tag name
-                  release_name: Release v$(node -p "require('./package.json').version")
+                  tag_name: v${NEW_VERSION} # Use the new version number as the tag name
+                  release_name: Release v${NEW_VERSION}
                   body: Auto-generated release from GitHub Actions.
                   draft: false
                   prerelease: false
