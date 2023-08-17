@@ -2,7 +2,7 @@ import { Tabs } from 'webextension-polyfill'
 
 export interface MonetizeThisInit {
     apiKey: string
-    options: LaunchOptions
+    options?: LaunchOptions
 }
 
 export interface LaunchOptions {

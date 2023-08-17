@@ -5,5 +5,8 @@
     "jsxBracketSameLine": false,
     "semi": false,
     "tabWidth": 4,
-    "useTabs": false
+    "useTabs": false,
+    "singleAttributePerLine": false,
+    "arrowParens": "always"
+
 }

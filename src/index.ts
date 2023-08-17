@@ -1,205 +1,184 @@
-import { LifecycleHooks, lifecycleHooks } from './hooks/lifecycle-hooks'
-import { customHooks, CustomHooks } from './hooks/custom-hooks'
-
 import browser, { Tabs } from 'webextension-polyfill'
-import { LaunchOptions, CookieDropData, MessageCommand, MonetizeThisInit } from './types'
-import {
-    ACTION_MONETIZE,
-    TAB_SWAPPED,
-    APP_NAME,
-    NOT_AVAILABLE,
-    API_URL,
-    MONETIZABLE_COOKIE,
-} from './constants'
-import { monetizeUrl } from './helpers/monetize-url'
-import CookieManager from './modules/cookie-manager'
-import BrowserInteraction from './modules/browser-interaction'
-import CustomHookManager from './modules/custom-hook-manager'
+import { CookieDropData, LaunchOptions, MessageCommand, MonetizeThisInit } from './types'
+import { ACTION_MONETIZE, MONETIZABLE_COOKIE } from './constants'
+import cookieManager from './modules/cookie-manager'
+import browserInteraction from './modules/browser-interaction'
+import customHookManager from './modules/custom-hook-manager'
 import fetchAffiliateLink from './functions/fetch-affiliate-link'
 import isMonetizable from './functions/is-monetizable'
 
+// Default options
 const defaultOptions: LaunchOptions = {
-    mode: 'auto', // Default mode set to 'auto'
-    enabled: false, // Default is disabled. Call monetizeThis.enabled(true) to enable
+    mode: 'auto',
+    enabled: false,
 }
 
-/**
- * Main class for managing monetization activities.
- */
-class MonetizeThis {
-    private apiKey: string
-    private options: LaunchOptions = defaultOptions
+// Main MonetizeThis Function
+const MonetizeThis = ({ apiKey, options }: MonetizeThisInit) => {
+    const mergedOptions = { ...defaultOptions, ...options }
 
-    public listeners
-    private cookieManager: CookieManager
-    private browserInteraction: BrowserInteraction
-    private customHookManager: CustomHookManager
+    // Define hooks
+    const listeners = {
+        onBeforeTabUpdate: customHookManager.addListener('beforeTabUpdate'),
+        onAfterTabUpdate: customHookManager.addListener('afterTabUpdate'),
+        onBeforeMonetizeTab: customHookManager.addListener('beforeMonetizeTab'),
+        onAfterMonetizeTab: customHookManager.addListener('afterMonetizeTab'),
+        onEnable: customHookManager.addListener('onEnable'),
+        onDisable: customHookManager.addListener('onDisable'),
+    }
 
-    /**
-     * Create a MonetizeThis instance.
-     * @param {MonetizeThisInit} Object containing API key and options.
-     * @returns {MonetizeThis} A MonetizeThis instance.
-     * @example const monetize = new MonetizeThis({ apiKey: '1234567890', options: { mode: 'auto' }})
-     */
-    constructor({ apiKey, options }: MonetizeThisInit) {
-        this.apiKey = apiKey
-        this.options = { ...defaultOptions, ...options }
+    // Run initialization hooks
+    customHookManager.runHooks('onInit', { options: mergedOptions })
 
-        // Dont lose context of this within callbacks!
-        this.onTabUpdate = this.onTabUpdate.bind(this)
-        this.onMessage = this.onMessage.bind(this)
-        this.monetizeTab = this.monetizeTab.bind(this)
+    // Enable or disable monetization
+    const enabled = async (on: boolean) => {
+        on ? enableMonetization() : disableMonetization()
+    }
 
-        this.cookieManager = new CookieManager()
-        this.browserInteraction = new BrowserInteraction()
-        this.customHookManager = new CustomHookManager()
+    // Enable monetization
+    const enableMonetization = () => {
+        mergedOptions.enabled = true
+        setupListeners()
+        customHookManager.runHooks('onEnable', {})
+    }
 
-        this.listeners = {
-            onBeforeTabUpdate: this.customHookManager.addListener('beforeTabUpdate'),
-            onAfterTabUpdate: this.customHookManager.addListener('afterTabUpdate'),
-            onBeforeMonetizeTab: this.customHookManager.addListener('beforeMonetizeTab'),
-            onAfterMonetizeTab: this.customHookManager.addListener('afterMonetizeTab'),
-            onEnable: this.customHookManager.addListener('onEnable'),
-            onDisable: this.customHookManager.addListener('onDisable'),
+    // Disable monetization
+    const disableMonetization = () => {
+        mergedOptions.enabled = false
+        removeListeners()
+        customHookManager.runHooks('onDisable', {})
+    }
+
+    const setupListeners = () => {
+        if (mergedOptions.mode === 'auto') {
+            browser.tabs.onUpdated.addListener(onTabUpdate)
         }
-
-        this.customHookManager.runHooks('onInit', { options }) // Hook: onInit
+        browser.runtime.onMessage.addListener(onMessage)
     }
 
-    /**
-     * Enable or disable monetization.
-     * @param {boolean} on - State of monetization.
-     * @returns {Promise<void>} A promise that resolves when the operation is complete.
-     * @example monetize.enabled(true)
-     */
-    public async enabled(on: boolean): Promise<void> {
-        if (on) {
-            this.options.enabled = true
-            this.setupListeners()
-            await this.customHookManager.runHooks('onEnable', {}) // Hook: onEnable
-        } else {
-            this.options.enabled = false
-            this.removeListeners()
-            await this.customHookManager.runHooks('onDisable', {}) // Hook: onDisable
-        }
+    const removeListeners = () => {
+        browser.tabs.onUpdated.removeListener(onTabUpdate)
+        browser.runtime.onMessage.removeListener(onMessage)
     }
 
-    private setupListeners(): void {
-        // Auto mode listener for tab updates
-        if (this.options.mode === 'auto') {
-            browser.tabs.onUpdated.addListener(this.onTabUpdate)
-        }
-
-        browser.runtime.onMessage.addListener(this.onMessage)
-    }
-
-    // Private method to remove various browser listeners
-    private removeListeners(): void {
-        // Code to remove listeners...
-        browser.tabs.onUpdated.removeListener(this.onTabUpdate)
-        browser.runtime.onMessage.removeListener(this.onMessage)
-    }
-
-    private async checkAndMonetizeTab(url: string): Promise<void> {
+    const checkAndMonetizeTab = async (url: string) => {
         const hostname = new URL(url).hostname
-
-        // TODO: Add Ignore List Check
-        if (this.options.ignoreList?.includes(hostname)) {
-            console.log(`Domain exists in Monetization List: ${hostname}`)
-            return
-        }
-
-        if (await this.cookieManager.checkRecentCookieDrop(hostname)) return
-        await this.monetizeTab(url)
+        const list = convertDomainsToHostnames(mergedOptions.ignoreList)
+        if (list.includes(hostname) || (await cookieManager.checkRecentCookieDrop(hostname))) return
+        await monetizeTab(url)
     }
 
-    private async onTabUpdate(
+    const convertDomainsToHostnames = (ignoreList: string[] = []): string[] =>
+        ignoreList.map((domain) => (domain.startsWith('http') ? new URL(domain).hostname : domain))
+
+    const onTabUpdate = async (
         tabId: number,
         changeInfo: Tabs.OnUpdatedChangeInfoType,
         tab: Tabs.Tab
-    ): Promise<void> {
-        await this.customHookManager.runHooks('beforeTabUpdate', { tabId, changeInfo, tab })
-
+    ) => {
+        await customHookManager.runHooks('beforeTabUpdate', { tabId, changeInfo, tab })
         if (changeInfo.status === 'complete' && tab.active) {
-            await this.checkAndMonetizeTab(tab.url || '')
+            await checkAndMonetizeTab(tab.url || '')
         }
-
-        await this.customHookManager.runHooks('afterTabUpdate', { tabId, changeInfo, tab })
+        await customHookManager.runHooks('afterTabUpdate', { tabId, changeInfo, tab })
     }
 
-    private async onMessage(message: MessageCommand): Promise<void> {
+    const onMessage = async (message: MessageCommand) => {
         const { command, url } = message
-
-        await this.customHookManager.runHooks('onBeforeMessage', { command, url }) // Hook: onBeforeMessage
-
+        await customHookManager.runHooks('onBeforeMessage', { command, url })
         if (command !== ACTION_MONETIZE) return
-
         try {
-            await this.monetizeTab(url)
+            await monetizeTab(url)
         } catch (error: unknown) {
             console.error('Failed to swap tabs', error)
         }
-
-        await this.customHookManager.runHooks('onAfterMessage', { command, url }) // Hook: onAfterMessage
+        await customHookManager.runHooks('onAfterMessage', { command, url })
     }
 
-    public async monetizeTab(url: string): Promise<void> {
-        await this.customHookManager.runHooks('beforeMonetizeTab', { url })
-
+    const monetizeTab = async (url: string): Promise<void> => {
+        await customHookManager.runHooks('beforeMonetizeTab', { url })
         const hostname = new URL(url).hostname
+        const hasRecentCookieDrop = await cookieManager.checkRecentCookieDrop(hostname)
 
-        // First we wanna check whether we've already dropped a cookie for this domain in the last 24 hours
-        const hasRecentCookieDrop = await this.cookieManager.checkRecentCookieDrop(hostname)
-        console.log(`Cookie drop status for ${hostname}:`, hasRecentCookieDrop)
+        if (hasRecentCookieDrop || (await isMonetizedTab(hostname))) return
 
-        if (hasRecentCookieDrop) return
-        // Get the URL from the AffiliateRelationship object
-        const affiliateURL = await fetchAffiliateLink(url, this.apiKey)
-        if (!affiliateURL) return
+        const newTab = await createMoneyTab(url, hostname)
+        if (!newTab) return
 
-        const activeTab = await this.browserInteraction.getActiveTab()
-        if (!activeTab) return
-
-        const newTab = await this.browserInteraction.createNewTab(affiliateURL) // Use the affiliate URL instead of the original URL
-        if (!newTab?.id) return
-
-        await this.browserInteraction.setActiveTab(activeTab.id as number)
-
-        const listener = async (tabId: number, info: any): Promise<void> => {
-            if (tabId === newTab.id && info.status === 'complete') {
-                browser.tabs.onUpdated.removeListener(listener) // Now you can remove it
-                browser.tabs.remove(newTab.id)
-
-                const cookieData = { value: MONETIZABLE_COOKIE, timestamp: Date.now() }
-                browser.storage.local.set({ [hostname]: cookieData })
-
-                await this.customHookManager.runHooks('afterMonetizeTab', { url, success: true })
+        const listener = (tabId: number, changeInfo: Tabs.OnUpdatedChangeInfoType) => {
+            if (tabId === newTab.id && changeInfo.status === 'complete') {
+                browser.tabs.onUpdated.removeListener(listener)
+                finalizeMonetization(hostname, url, newTab.id)
             }
         }
 
-        browser.tabs.onUpdated.addListener(listener) // Add the listener by referencing its name
+        browser.tabs.onUpdated.addListener(listener)
+    }
+
+    const isMonetizedTab = async (hostname: string): Promise<boolean> => {
+        const monetizedTabs = await browser.storage.local.get('monetizedTabs')
+        return monetizedTabs.monetizedTabs?.[hostname] ?? false
+    }
+
+    const createMoneyTab = async (url: string, hostname: string): Promise<Tabs.Tab | null> => {
+        console.log(`Cookie drop status for ${hostname}:`, false)
+        const affiliateURL = await fetchAffiliateLink(url, apiKey)
+        if (!affiliateURL) {
+            console.error(`No money link exists for ${url}`)
+            return null
+        }
+
+        const activeTab = await browserInteraction.getActiveTab()
+        if (!activeTab) return null
+
+        // Retrieve existing monetized tabs and update with the new one.
+        const monetizedTabs = (await browser.storage.local.get('monetizedTabs')).monetizedTabs || {}
+        monetizedTabs[hostname] = true
+
+        await browser.storage.local.set({ monetizedTabs })
+
+        const newTab = await browserInteraction.createNewTab(affiliateURL)
+        if (!newTab?.id) return null
+
+        await browserInteraction.setActiveTab(activeTab.id as number)
+
+        return newTab
+    }
+
+    const finalizeMonetization = async (
+        hostname: string,
+        url: string,
+        newTabId: number
+    ): Promise<void> => {
+        // Retrieve existing monetized tabs and remove the current one.
+        const monetizedTabs = (await browser.storage.local.get('monetizedTabs')).monetizedTabs || {}
+        delete monetizedTabs[hostname]
+
+        await browser.storage.local.set({ monetizedTabs })
+
+        browser.tabs.remove(newTabId)
+
+        const cookieData: CookieDropData = { value: MONETIZABLE_COOKIE, timestamp: Date.now() }
+        browser.storage.local.set({ [hostname]: cookieData })
+
+        await customHookManager.runHooks('afterMonetizeTab', { url, success: true })
+    }
+    return {
+        enabled,
+        listeners,
+        monetizeTab,
+        isMonetizable,
+        options: mergedOptions,
+        checkAndMonetizeTab
     }
 }
 
+export type MonetizeThisInstance = ReturnType<typeof MonetizeThis>
+
 export default MonetizeThis
-export { monetizeUrl, isMonetizable }
 
-/* Example usage
-
-const monetizeThis = new MonetizeThis({ apiKey: '1', options: { mode: 'auto', enabled: true, ignoreList: ['example.com', 'another-domain.com'], // Domains to ignore
- } })
-monetizeThis.enabled(true)
-monetizeThis.listeners.onAfterMonetizeTab((data) => console.log(data))
-
-*/
-
-// const monetizeThis = new MonetizeThis({
-//     apiKey: '@dougwithseismic',
-//     options: {
-//         mode: 'auto',
-//         enabled: true,
-//         ignoreList: ['example.com', 'another-domain.com'], // Domains to ignore
-//     },
+// const monetizeThis: MonetizeThisInstance = MonetizeThis({
+//     apiKey: '1234567890',
+//     options: { mode: 'auto' },
 // })
 
-// monetizeThis.enabled(true)

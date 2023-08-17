@@ -21,7 +21,7 @@
         "prepublishOnly": "npm run build",
         "test": "jest",
         "lint": "eslint './src/**/*.{ts,tsx}' --quiet",
-        "format": "prettier --write './src/**/*.{ts,tsx,js,json,md}'",
+        "format": "prettier --write 'src/**/*.{ts,tsx,js,json,md}'",
         "format:check": "prettier --check './src/**/*.{ts,tsx,js,json,md}'"
     },
     "repository": {
@@ -32,6 +32,11 @@
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/dougwithseismic/monetize-this.git/issues"
+    },
+    "husky": {
+        "hooks": {
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+        }
     },
     "keywords": [
         "typescript",
@@ -49,6 +54,7 @@
     "devDependencies": {
         "@types/babel__core": "^7.20.1",
         "@types/chrome": "^0.0.240",
+        "@types/jest": "^27.5.2",
         "@types/node": "^20.4.1",
         "@types/webextension-polyfill": "^0.10.1",
         "@typescript-eslint/eslint-plugin": "^4.28.3",
@@ -56,13 +62,14 @@
         "concurrently": "^8.2.0",
         "esbuild": "^0.18.17",
         "eslint": "^7.30.0",
-        "jest": "^27.0.5",
+        "jest": "^27.5.1",
+        "jest-webextension-mock": "^3.8.9",
         "nodemon": "^3.0.1",
         "prettier": "^3.0.0",
-        "ts-jest": "^27.0.3",
+        "ts-jest": "^27.1.5",
         "ts-node": "^10.9.1",
         "tsconfig-paths": "^4.2.0",
-        "typescript": "^4.3.5"
+        "typescript": "^4.9.5"
     },
     "contributors": [
         "Doug Silkstone (https://x.withseismic.com)"
