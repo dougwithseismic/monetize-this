@@ -1,0 +1,56 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - main # adjust the branch name as needed
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+        registry-url: 'https://registry.npmjs.org'
+
+    - name: Configure Git
+      run: |
+        git config user.name "Doug Silkstone"
+        git config user.email "doug@withseismic.com"
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run tests
+      run: npm test
+
+    - name: Build project with prepublishOnly
+      run: npm run prepublishOnly
+
+    - name: Increment version
+      run: |
+        npm version patch -m "chore: increment version"
+        git push origin main --follow-tags || echo "No changes to push"
+
+    - name: Publish to npm
+      if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: Auto-generated release from GitHub Actions.
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
