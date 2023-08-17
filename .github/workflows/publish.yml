@@ -52,7 +52,7 @@ jobs:
                   tag_name: v${{ env.NEW_VERSION }} # Use the new version number as the tag name
                   release_name: Release v${{ env.NEW_VERSION }}
                   body: Auto-generated release from GitHub Actions.
-                  draft: false
+                  draft: true
                   prerelease: false
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
