@@ -21,8 +21,8 @@ jobs:
 
     - name: Configure Git
       run: |
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
+        git config user.name "Doug Silkstone"
+        git config user.email "doug@withseismic.com"
 
     - name: Install dependencies
       run: npm install
@@ -44,6 +44,6 @@ jobs:
     # Optional: Add the dist directory and updated package.json to the commit
     - name: Commit changes
       run: |
-        git add dist/* package.json CHANGELOG.md README.md
-        git commit -m "chore: Add built files and increment version" || echo "No changes to commit"
+        git add package.json
+        git commit -m "chore: increment version" || echo "No changes to commit"
         git push origin main || echo "No changes to push"
