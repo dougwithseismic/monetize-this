@@ -19,6 +19,11 @@ jobs:
         node-version: '18'
         registry-url: 'https://registry.npmjs.org' # Required for npm publish
 
+    - name: Configure Git
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+
     - name: Install dependencies
       run: npm install
 
@@ -36,9 +41,9 @@ jobs:
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # make sure to set this in your repository's secrets
 
-    # Optional: Add the dist directory, updated package.json, CHANGELOG.md, and README.md to the commit
+    # Optional: Add the dist directory and updated package.json to the commit
     - name: Commit changes
       run: |
         git add dist/* package.json CHANGELOG.md README.md
-        git commit -m "chore: Add built files, increment version, and update docs" || echo "No changes to commit"
+        git commit -m "chore: Add built files and increment version" || echo "No changes to commit"
         git push origin main || echo "No changes to push"
