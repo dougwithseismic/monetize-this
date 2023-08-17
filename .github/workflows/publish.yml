@@ -41,6 +41,13 @@ jobs:
     - name: Build project
       run: npm run build
 
+    - name: Check for uncommitted changes
+      run: |
+        if [[ -n $(git status -s) ]]; then
+          echo "Uncommitted changes found. Please commit or ignore them before running this action.";
+          exit 1;
+        fi
+
     - name: Increment version
       run: |
         npm version patch # You can use 'major', 'minor', or 'patch' as needed
