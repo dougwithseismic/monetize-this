@@ -21,16 +21,8 @@ jobs:
 
     - name: Configure Git
       run: |
-        git config user.name "Your Name"
-        git config user.email "you@example.com"
-
-    - name: Cache dependencies
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+        git config user.name "Doug Silkstone"
+        git config user.email "doug@withseismic.com"
 
     - name: Install dependencies
       run: npm install
@@ -41,17 +33,14 @@ jobs:
     - name: Build project
       run: npm run build
 
-    - name: Check for uncommitted changes
-      run: |
-        if [[ -n $(git status -s) ]]; then
-          echo "Uncommitted changes found. Please commit or ignore them before running this action.";
-          exit 1;
-        fi
-
     - name: Increment version
+      run: npm version patch # You can use 'major', 'minor', or 'patch' as needed
+
+    - name: Commit changes
       run: |
-        npm version patch # You can use 'major', 'minor', or 'patch' as needed
-        git push origin main || echo "No changes to push" # Push the commit created by npm version
+        git add package.json
+        git commit -m "chore: increment version"
+        git push origin main || echo "No changes to push"
 
     - name: Publish to npm
       if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
