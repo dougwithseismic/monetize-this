@@ -30,8 +30,8 @@ jobs:
     - name: Run tests
       run: npm test
 
-    - name: Build project with prepublishOnly
-      run: npm run prepublishOnly
+    - name: Build project
+      run: npm run build
 
     - name: Increment version
       run: |
