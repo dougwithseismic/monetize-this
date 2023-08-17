@@ -46,6 +46,12 @@ jobs:
                   git tag v$NEW_VERSION # Prefix the tag with 'v'
                   git push origin v$NEW_VERSION
 
+            - name: Publish to npm
+              if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+              run: npm publish
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
             - name: Create GitHub Release
               uses: actions/create-release@v1
               with:
