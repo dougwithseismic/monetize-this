@@ -21,8 +21,8 @@ jobs:
 
     - name: Configure Git
       run: |
-        git config user.name "Doug Silkstone"
-        git config user.email "doug@withseismic.com"
+        git config user.name "Your Name"
+        git config user.email "you@example.com"
 
     - name: Cache dependencies
       uses: actions/cache@v2
@@ -42,17 +42,12 @@ jobs:
       run: npm run build
 
     - name: Increment version
-      run: npm version patch # You can use 'major', 'minor', or 'patch' as needed
+      run: |
+        npm version patch # You can use 'major', 'minor', or 'patch' as needed
+        git push origin main || echo "No changes to push" # Push the commit created by npm version
 
     - name: Publish to npm
       if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
       run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # make sure to set this in your repository's secrets
-
-    # Optional: Add the updated package.json to the commit
-    - name: Commit changes
-      run: |
-        git add package.json
-        git commit -m "chore: increment version" || echo "No changes to commit"
-        git push origin main || echo "No changes to push"
