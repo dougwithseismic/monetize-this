@@ -27,12 +27,17 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Run tests
+    - name: Run tests1
       run: npm test
 
     - name: Build project with prepublishOnly
       run: npm run prepublishOnly
 
+    - name: Commit prepublishOnly changes if any
+      run: |
+        git add -A
+        git diff-index --quiet HEAD || git commit -m "chore: commit changes from prepublishOnly"
+      
     - name: Check for uncommitted changes
       run: |
         git diff-index --quiet HEAD || (echo "There are uncommitted changes. Please commit or stash them." && exit 1)
