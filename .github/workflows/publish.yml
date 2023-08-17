@@ -24,6 +24,14 @@ jobs:
         git config user.name "Doug Silkstone"
         git config user.email "doug@withseismic.com"
 
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
     - name: Install dependencies
       run: npm install
 
@@ -37,11 +45,12 @@ jobs:
       run: npm version patch # You can use 'major', 'minor', or 'patch' as needed
 
     - name: Publish to npm
+      if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
       run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # make sure to set this in your repository's secrets
 
-    # Optional: Add the dist directory and updated package.json to the commit
+    # Optional: Add the updated package.json to the commit
     - name: Commit changes
       run: |
         git add package.json
