@@ -1,6 +1,6 @@
 {
     "name": "monetize-this",
-    "version": "0.0.25",
+    "version": "0.0.26",
     "description": "Monetize any web extension audience, empower free product development.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
